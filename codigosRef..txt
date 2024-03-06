@@ -1,0 +1,74 @@
+En formulario
+import { useCotizador } from "../hooks";
+
+const { formState, handleChange } = useCotizador();
+
+Boton con border
+ 
+ <button className="py-2 px-6 text-white rounded-md border border-violet-600/50 hover:border hover:border-violet-700 transition-all ease-out duration-100"
+ onClick={cambiarState}>
+	Login			
+</button> 
+
+onChange={ handleChange as React.ChangeEventHandler<HTMLInputElement | HTMLSelectElement>}
+name="marca"
+value={formState.marca}	
+
+
+CotizadorContext.tsx
+
+import { ChangeEvent, createContext } from "react";
+import { FormState } from "../hooks/useFormulario";
+
+export type User = {
+	onInputChange: React.ChangeEventHandler<HTMLInputElement>;
+	formState: FormState;
+	onResetForm: () => void;
+	handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	setformState: Dispatch<SetStateAction<FormState>>;
+};
+
+export type User = {
+ 	login: Logged;
+ 	saludo: string;
+ 	saludar: void;
+ 	hero: Heros;
+ };
+
+ export type User = {
+ marca: string;
+ modal: boolean;
+ cambiarState: () => void;
+ setModal: React.Dispatch<React.SetStateAction<boolean>>;
+ };
+
+export const CotizadorContext = createContext<User>({} as User);
+
+									
+CotizadorProvider.tsx
+
+import { useFormulario } from "../hooks/useFormulario";
+import { CotizadorContext } from "./CotizadorContext";
+
+interface props {
+	children: JSX.Element | JSX.Element[];
+}
+
+export const CotizadorProvider = ({ children }: props) => {
+	const { formState, onResetForm, onInputChange, handleChange } =
+		useFormulario();
+
+	return (
+		<>
+			<CotizadorContext.Provider
+				value={{ handleChange, formState, onInputChange, onResetForm }}
+			>
+				{children}
+			</CotizadorContext.Provider>
+		</>
+	);
+};
+
+
+import { v4 as uuidv4 } from "uuid"; // Importa uuid
+newTodo.id = uuidv4();
